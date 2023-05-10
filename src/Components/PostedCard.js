@@ -24,6 +24,7 @@ const PostedCard = ({
   borderRadius,
   marginBottom,
   onPress,
+  handleImageLoad
 }) => 
 {
   function shortenNumber(num) {
@@ -55,7 +56,7 @@ const PostedCard = ({
                 <AutoHeightImage 
                   source={PostedImage}  
                   width={screenWidth}
-                  
+                  onHeightChange={handleImageLoad}
                 /> 
                 <LinearGradient 
                     style={{
@@ -108,24 +109,11 @@ const PostedCard = ({
                         <View style={{ height:50, width:'80%', }} >
                             <Text style={{  fontSize: size1, width: 190, color: '#FFFFFF', }} numberOfLines={numberOfLines} >{ArtName}</Text>
                             <View style={{flexDirection:'row',}}>
-                                <Text style={{ fontSize: size2, width: 160, color: '#8CD1F5', }} numberOfLines={numberOfLines}>By: {ArtistName}</Text>
-                                <View style={{
-                                            backgroundColor:colors.uCon, 
-                                            marginLeft:10, 
-                                            padding:5, 
-                                            position:'absolute', 
-                                            right:0, 
-                                            top:-13, 
-                                            borderRadius:10,
-                                            justifyContent:'center',
-                                            alignItems:'center',
-                                            
-                                            maxWidth:300,
-                                        }}>
+                                <Text style={{ fontSize: size2, maxWidth: 150, color: '#8CD1F5', }} numberOfLines={numberOfLines}>By: {ArtistName}</Text>
                                     <View 
                                         style={{
                                             flexDirection:'row', 
-                                            backgroundColor:colors.buttons2,
+                                            //backgroundColor:colors.buttons2,
                                             width:'100%',
                                             height:'100%',
                                             borderRadius:5,
@@ -134,28 +122,28 @@ const PostedCard = ({
                                             <Ionicons 
                                             name='at'
                                             size={18}
-                                            color={colors.hBG}
+                                            color={'#8CD1F5'}
                                             style={{
-                                            paddingTop:4,
+                                            paddingTop:2,
                                             padding:2,
                                             }}
                                         />  
                                         <Text 
                                             style={{ 
                                                 
-                                                color:colors.hBG, 
+                                                color:'#8CD1F5', 
                                                 fontSize:16,
                                                 
                                             
-                                                padding:2,
+                                                padding:0,
                                                 height:28,
                                             }} 
                                             numberOfLines={numberOfLines}
                                         >
                                             {ArtistHandle}
                                         </Text>
-                                    </View>                                
-                                </View>
+                                    </View>                                 
+
 
                             </View>
                         </View>                    

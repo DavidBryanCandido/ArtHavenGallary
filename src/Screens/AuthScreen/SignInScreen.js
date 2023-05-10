@@ -47,7 +47,7 @@ const SignInScreen = ({navigation}) => {
                             <TouchableOpacity  
                                 style={parameters.styledButton} 
                                 //onPress={() => {props.handleSubmit}}
-                                onPress={() =>{navigation.navigate('BottomNavigator')}}
+                                onPress={() =>{navigation.navigate('DrawerNavigation')}}
                                 activeOpacity={.7}
                             >
                                 <Text style={parameters.buttonTitle2}>
@@ -97,20 +97,17 @@ const SignInScreen = ({navigation}) => {
                     width:'100%',
                 }} 
             >
+                <TouchableOpacity 
+                    activeOpacity={.7}  
+                    onPress={() => {navigation.navigate('RegisterScreen')}}
+                >            
                 <Text 
                     style={{ 
                         color:colors.text2, 
                         fontSize:15, 
                         marginRight:5,
                     }}
-                >
-                    New on ArtHaven
-                </Text>
-                <TouchableOpacity 
-                    activeOpacity={.7}  
-                    onPress={() => {navigation.navigate('RegisterScreen')}}
-                >
-                    <Text 
+                > New on ArtHaven <Text 
                         style={{ 
                             color:colors.buttons2, 
                             fontSize:15, 
@@ -118,7 +115,10 @@ const SignInScreen = ({navigation}) => {
                         }}
                     >
                         Create account
-                    </Text>
+                    </Text>                    
+                </Text>
+
+
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

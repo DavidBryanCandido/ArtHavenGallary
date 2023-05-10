@@ -26,9 +26,13 @@ const PasswordTextInput = ({
                 onChangeText={onChangeText}
                 placeholderTextColor= {colors.text2}
             />
-            <TextInput 
+{
+    /*
+                <TextInput 
                 style={{ ...styles.input, position:'absolute',}}
             />
+    */
+}
             <Ionicons 
                 name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
                 size={24}

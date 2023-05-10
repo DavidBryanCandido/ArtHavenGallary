@@ -2,10 +2,27 @@ import { StyleSheet, Text, View,ImageBackground, TextInput  } from 'react-native
 import React from 'react'
 import { colors } from '../Global/styles'
 import { Ionicons } from '@expo/vector-icons';
+import Header from '../Components/Header';
+import { useNavigation } from '@react-navigation/native';
 
-const ShopScreen = ({searchQuery, setSearchQuery}) => {
+const ShopScreen = ({searchQuery, setSearchQuery, }) => {
+    const navigation = useNavigation();
+    //console.log(useNavigation); 
+    const onMenuPress = () => {
+        navigation.toggleDrawer()
+    }
     return (
         <View>
+            <Header 
+                menuOrBack={'forwardburger'}
+                //menuOrBack={'grid-outline'}                
+                //title={'MY ACCOUNT'}
+                //post={'plus-box-outline'}                
+                logo={require('../../assets/ArtHaven_logo.png')}
+
+                onMenuPress={onMenuPress}
+                navigation={navigation}
+            />
             <ImageBackground 
                 source={require('../../assets/tree.png')} 
                 style={{

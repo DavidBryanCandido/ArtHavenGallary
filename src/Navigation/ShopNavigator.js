@@ -39,12 +39,12 @@ const ShopNavigator = () => {
                     tabBarInactiveTintColor:colors.buttons,
                     tabBarIndicatorStyle:{ 
                     backgroundColor: colors.buttons2, 
-                    width:50, 
+                    // width:50, 
                     },
                     tabBarIndicatorContainerStyle: {
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginLeft:47,
+                    //marginLeft:47,
                     },
                     tabBarScrollEnabled: true, 
                     scrollEnabled:false,

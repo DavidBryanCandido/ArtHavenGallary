@@ -36,18 +36,22 @@ const Header = ({
                     <View 
                         style={{ 
                             height: '100%', 
-                            alignItems:'center', 
-                            justifyContent:'center', 
-                            marginRight:0,
+                            //alignItems:'center', 
+                            justifyContent:'center',
+                            backgroundColor:'red', 
+                            position:'absolute',
+                           
                         }}>
+                   
+                    </View>
                             <Image 
                                 source={logo} 
                                 style={{ 
                                     height: 35,
                                     width:110,
+                                    alignSelf:'center',
                                 }}
-                            />                    
-                    </View>
+                            /> 
                     <MaterialCommunityIcons 
                         name={post}
                         size={35}

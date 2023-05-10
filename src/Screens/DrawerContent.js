@@ -4,8 +4,11 @@ import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navi
 import { Avatar, Button, Icon } from 'react-native-elements'
 import { colors } from '../Global/styles'
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const DrawerContent = (props) => {
+    const navigation = useNavigation(); // Hook for accessing the navigation object
+
     return (
         <View style={styles.container}>
             <DrawerContentScrollView {...props}>
@@ -65,7 +68,10 @@ const DrawerContent = (props) => {
             <DrawerItem
                 label="Sign Out"
                 labelStyle={{ color:colors.text2, fontSize:16,}}
-                onPress={() => {props.navigation.navigate('SignInScreen')}}
+                onPress={() => {
+                    props.navigation.navigate('SignInScreen')
+                    props.navigation.toggleDrawer();
+                }}
                 icon={({ size }) =>(
                     <Ionicons 
                         name='log-out-outline'

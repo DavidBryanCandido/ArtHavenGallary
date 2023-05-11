@@ -18,7 +18,7 @@ const DrawerContent = (props) => {
                             rounded
                             avatarStyle={styles.avatar}
                             size={60}
-                            source = {require('../Img/UserFp/skull_fp.png')}
+                            source = {require('../Img/UserImg/skull_fp.png')}
                         />
                         <View style={{ width: 175,height:55, alignContent:'center',justifyContent:'center', marginLeft:10,}}>
                             <Text style={{ fontSize: 15, color:colors.text2, }}>Signed in as</Text>  
@@ -69,7 +69,7 @@ const DrawerContent = (props) => {
                 label="Sign Out"
                 labelStyle={{ color:colors.text2, fontSize:16,}}
                 onPress={() => {
-                    props.navigation.navigate('SignInScreen')
+                    props.navigation.navigate('SignInWelcomeScreen')
                     props.navigation.toggleDrawer();
                 }}
                 icon={({ size }) =>(

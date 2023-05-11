@@ -1,22 +1,20 @@
 import { StyleSheet, Text, View, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { colors } from '../Global/styles';
-import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../Global/styles'
+import { Ionicons } from '@expo/vector-icons'
 
-const Input = ({
-    placeholder,
-    value,
-    onChangeText,
-    width = 320,
-}) => {
+const Input = ({ placeholder, value, onChangeText, width = 320 }) => {
+    const [name, setName] = useState('')
+
     return (
-        <View style={{...styles.inputContainer, width: width,}}>
-            <TextInput 
-                placeholder= {placeholder}
+        <View style={{ ...styles.inputContainer, width: width }}>
+            <TextInput
+                placeholder={placeholder}
                 value={value}
                 onChangeText={onChangeText}
-                placeholderTextColor= {colors.text2}
-                style={{ ...styles.input,}}
+                placeholderTextColor={colors.text2}
+                autoFocus
+                style={{ ...styles.input }}
             />
         </View>
     )
@@ -25,29 +23,27 @@ const Input = ({
 export default Input
 
 const styles = StyleSheet.create({
-    inputContainer: { 
+    inputContainer: {
         backgroundColor: colors.ipBG2,
-        marginTop:20,
-        marginLeft:20,
-        borderRadius:5,
-        height:40,
-        
-        paddingHorizontal:16,
-        color:colors.buttons,
-        fontSize:18,
+        marginTop: 20,
+        marginLeft: 20,
+        borderRadius: 5,
+        height: 40,
 
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignContent:'center',
-        alignItems:'center',
+        paddingHorizontal: 16,
+        color: colors.buttons,
+        fontSize: 18,
 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignContent: 'center',
+        alignItems: 'center',
     },
     input: {
         flex: 1,
         padding: 0,
-        color:colors.buttons,
-        fontSize:16,
-        paddingLeft:0,
-        
+        color: colors.buttons,
+        fontSize: 16,
+        paddingLeft: 0,
     },
 })

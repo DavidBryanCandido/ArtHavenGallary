@@ -13,7 +13,7 @@ const BottomTabs = createBottomTabNavigator();
 const BottomNavigator = () => {
     return (
         <BottomTabs.Navigator
-            initialRouteName='HomeScreen'
+            initialRouteName='ProfileScreen'
             screenOptions={({route}) => ({
                 headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => {

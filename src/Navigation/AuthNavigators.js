@@ -1,5 +1,6 @@
-import { View, Text } from 'react-native'
+import { View, Text, StatusBar } from 'react-native'
 import React from 'react'
+import { colors } from '../Global/styles'
 import { createStackNavigator } from '@react-navigation/stack'
 import SignInWelcomeScreen from '../Screens/AuthScreen/SignInWelcomeScreen'
 import SignInScreen from '../Screens/AuthScreen/SignInScreen'
@@ -14,24 +15,44 @@ const AuthStack = createStackNavigator()
 const AuthNavigators = () => {
     return (
         <Screen>
-        <AuthStack.Navigator initialRouteName='DrawerNavigation' screenOptions={{headerShown: false}}>
-            <AuthStack.Screen name='SignInWelcomeScreen'>
-                {({ navigation }) => <SignInWelcomeScreen navigation={navigation} buttonName={'Sign In'} /> }
-            </AuthStack.Screen>
-            <AuthStack.Screen name='SignInScreen'>
-                {({ navigation }) => <SignInScreen navigation={navigation} buttonName2='Sign In' />}
-            </AuthStack.Screen>
-            <AuthStack.Screen name='RegisterScreen'>
-                {({ navigation }) => <RegisterScreen navigation={navigation} />}
-            </AuthStack.Screen>
-{/*
+            <StatusBar
+                barStyle="night-content"
+                backgroundColor={colors.bgLight}
+            />
+            <AuthStack.Navigator
+                initialRouteName="DrawerNavigation"
+                screenOptions={{ headerShown: false }}
+            >
+                <AuthStack.Screen name="SignInWelcomeScreen">
+                    {({ navigation }) => (
+                        <SignInWelcomeScreen
+                            navigation={navigation}
+                            buttonName={'Sign In'}
+                        />
+                    )}
+                </AuthStack.Screen>
+                <AuthStack.Screen name="SignInScreen">
+                    {({ navigation }) => (
+                        <SignInScreen
+                            navigation={navigation}
+                            buttonName2="Sign In"
+                        />
+                    )}
+                </AuthStack.Screen>
+                <AuthStack.Screen name="RegisterScreen">
+                    {({ navigation }) => (
+                        <RegisterScreen navigation={navigation} />
+                    )}
+                </AuthStack.Screen>
+                {/*
             <AuthStack.Screen name='BottomNavigator' component={BottomNavigator}  />
 */}
-            <AuthStack.Screen name='DrawerNavigation' component={DrawerNavigation}  />
-            <AuthStack.Screen name='PostDetails' component={PostDetails}/>
-
-
-        </AuthStack.Navigator>
+                <AuthStack.Screen
+                    name="DrawerNavigation"
+                    component={DrawerNavigation}
+                />
+                <AuthStack.Screen name="PostDetails" component={PostDetails} />
+            </AuthStack.Navigator>
         </Screen>
     )
 }

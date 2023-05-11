@@ -1,7 +1,7 @@
 export const PostedCardData = [
     {   
         PostedImage:require('../Img/PostedImage/Penguin.jpg'), 
-        ArtistPf:require('../Img/UserFp/skull_fp.png'), 
+        ArtistPf:require('../Img/UserImg/skull_fp.png'), 
         ArtName:"Penguin",
         ArtistName:"DaVoidC",
         Price:"309",
@@ -14,7 +14,7 @@ export const PostedCardData = [
     },
     {
         PostedImage:require('../Img/PostedImage/bgsky.png'), 
-        ArtistPf:require('../Img/UserFp/skull_fp.png'), 
+        ArtistPf:require('../Img/UserImg/skull_fp.png'), 
         ArtName:"Penguin",
         ArtistName:"DaVoidC",
         Price:"0",
@@ -27,7 +27,7 @@ export const PostedCardData = [
     },
     {
         PostedImage:require('../Img/PostedImage/FrogTurtle.webp'), 
-        ArtistPf:require('../Img/UserFp/skull_fp.png'), 
+        ArtistPf:require('../Img/UserImg/skull_fp.png'), 
         ArtName:"FrogTurtle",
         ArtistName:"DaVoidC",
         Price:"0",
@@ -40,7 +40,7 @@ export const PostedCardData = [
     },
     {
         PostedImage:require('../Img/PostedImage/Giraffe.webp'), 
-        ArtistPf:require('../Img/UserFp/skull_fp.png'), 
+        ArtistPf:require('../Img/UserImg/skull_fp.png'), 
         ArtName:"Giraffe",
         ArtistName:"DaVoidC",
         Price:"999",
@@ -53,7 +53,7 @@ export const PostedCardData = [
     },
     {
         PostedImage:require('../Img/PostedImage/SnakeBear.webp'), 
-        ArtistPf:require('../Img/UserFp/skull_fp.png'), 
+        ArtistPf:require('../Img/UserImg/skull_fp.png'), 
         ArtName:"Penguin",
         ArtistName:"DaVoidC",
         Price:"599",

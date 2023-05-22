@@ -4,6 +4,7 @@ import {
     View,
     TouchableOpacity,
     TextInput,
+    ScrollView,
 } from 'react-native'
 import React, { useState, useRef } from 'react'
 import { colors, title, parameters } from '../../Global/styles'
@@ -13,7 +14,8 @@ import PasswordTextInput from '../../Components/PasswordTextInput'
 import SignInAlternative from '../../Components/SignInAlternative'
 
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { FIREBASE_AUTH } from '../../../firebaseConfig'
+import { FIREBASE_AUTH, FIRESTORE_DB } from '../../../firebaseConfig'
+import { collection, addDoc } from 'firebase/firestore'
 
 const RegisterScreen = ({ navigation }) => {
     const confirmRef = useRef(null)
@@ -22,28 +24,93 @@ const RegisterScreen = ({ navigation }) => {
         navigation.goBack()
     }
 
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [password, setPassword] = useState('')
+    const [fullName, setFullName] = useState('')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+
+    const generateUserHandle = (username) => {
+        // Check if the username is already in use, if yes, generate a unique handle
+        // You can implement your own logic to generate a unique handle
+        // For simplicity, we'll append a number to the username
+        let handle = username
+        let handleExists = false
+        let count = 1
+
+        while (handleExists) {
+            handle = `${username}${count}`
+            // Check if the handle exists in the database or your user records
+            // Set handleExists to true if the handle exists
+            // You can implement your own logic to check handle existence
+            handleExists = checkHandleExists(handle)
+            count++
+        }
+
+        return handle
+    }
 
     const handleSignUp = () => {
+        // Generate the user handle
+        const userHandle = generateUserHandle(username)
+
+        // Create the user object with the required fields
+        const user = {
+            fullName,
+            username,
+            email,
+            userHandle,
+        }
+
         createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
             .then((userCredential) => {
                 // Signed up successfully
                 const user = userCredential.user
                 console.log('User signed up:', user)
+
+                // Store user data in Firestore
+                addUserToFirestore(
+                    user.uid,
+                    userHandle,
+                    user.email,
+                    user.displayName
+                )
+
                 navigation.navigate('SignInScreen')
             })
             .catch((error) => {
                 const errorCode = error.code
                 const errorMessage = error.message
-                alert([errorMessage], errorMessage)
+                alert(errorMessage)
 
                 // Handle the error here
             })
     }
+
+    const addUserToFirestore = async (
+        userId,
+        userHandle,
+        email,
+        displayName
+    ) => {
+        try {
+            const usersCollectionRef = collection(FIRESTORE_DB, 'users')
+            await addDoc(usersCollectionRef, {
+                userId,
+                fullName,
+                username,
+                userHandle,
+                email,
+                displayName,
+            })
+            console.log('User added to Firestore')
+        } catch (error) {
+            console.error('Error adding user to Firestore:', error)
+        }
+    }
+
     return (
-        <View style={{ ...styles.container }}>
+        <ScrollView style={{ ...styles.container }}>
             <Header
                 menuOrBack={'arrow-left'}
                 title={'MY ACCOUNT'}
@@ -56,6 +123,16 @@ const RegisterScreen = ({ navigation }) => {
                 <Text style={title}>Sign Up</Text>
             </View>
             <View>
+                <Input
+                    placeholder={'Full Name'}
+                    value={fullName}
+                    onChangeText={setFullName}
+                />
+                <Input
+                    placeholder={'Username'}
+                    value={username}
+                    onChangeText={setUsername}
+                />
                 <Input
                     placeholder={'Email'}
                     value={email}
@@ -196,7 +273,7 @@ const RegisterScreen = ({ navigation }) => {
                     </Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -206,7 +283,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.bgLight,
-        alignItems: 'center',
+        // alignItems: 'center',
     },
     btnStyle: {
         justifyContent: 'center',

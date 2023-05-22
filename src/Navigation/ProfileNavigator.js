@@ -5,12 +5,17 @@ import { colors } from '../Global/styles'
 import ProfileScreen from '../Screens/ProfileScreen'
 import ProfileAllPostScreen from '../Screens/ProfileAllPostScreen'
 import ProfileLikesScreen from '../Screens/ProfileLikesScreen'
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { color } from 'react-native-reanimated'
+import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
+import { getAuth } from 'firebase/auth'
 
 const ProfileTab = createMaterialTopTabNavigator()
 
 const ProfileNavigator = ({ navigation }) => {
+    const auth = getAuth(FIREBASE_APP)
+    const loggedInUserId = auth.currentUser.uid
+
     const [showView, setShowView] = useState(false)
 
     const handleScroll = (event) => {
@@ -63,7 +68,7 @@ const ProfileNavigator = ({ navigation }) => {
                             name="ProfileLikesScreen"
                             component={ProfileLikesScreen}
                             options={{
-                                title: 'Likes',
+                                title: 'Favorite',
                             }}
                         />
                     </ProfileTab.Navigator>
@@ -71,13 +76,28 @@ const ProfileNavigator = ({ navigation }) => {
             </ScrollView>
             <View style={styles.showView}>
                 <Ionicons
-                    name="chevron-forward-outline"
-                    size={30}
+                    name="chevron-back-outline"
+                    size={35}
                     color={colors.buttons}
                     onPress={() => {
-                        navigation.toggleDrawer()
+                        navigation.goBack()
                     }}
                 />
+                {loggedInUserId && (
+                    <MaterialCommunityIcons
+                        name="plus-box-outline"
+                        size={35}
+                        color={colors.buttons}
+                        style={
+                            {
+                                // right: 10,
+                            }
+                        }
+                        onPress={() => {
+                            navigation.navigate('PostScreen')
+                        }}
+                    />
+                )}
             </View>
         </View>
     )
@@ -90,9 +110,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: 'red', // Replace with your desired background color for the header
-        height: 400,
-        marginTop: 60,
+        backgroundColor: colors.bgLight,
+        height: 300,
+        marginTop: 50,
     },
     content: {
         // flex: 1,
@@ -102,12 +122,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         backgroundColor: colors.hBG,
-        height: 60,
+        height: 50,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        paddingHorizontal: 10,
+        paddingHorizontal: 16,
         borderBottomWidth: 0.5,
         borderBottomColor: colors.buttons,
     },

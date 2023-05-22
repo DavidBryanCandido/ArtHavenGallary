@@ -9,6 +9,7 @@ import Screen from '../Components/Screen'
 import DrawerNavigation from './DrawerNavigation'
 //import BottomNavigator from './BottomNavigator'
 import PostDetails from '../Screens/PostDetails'
+import PostScreen from '../Screens/PostScreen'
 
 const AuthStack = createStackNavigator()
 
@@ -20,7 +21,7 @@ const AuthNavigators = () => {
                 backgroundColor={colors.bgLight}
             />
             <AuthStack.Navigator
-                initialRouteName="DrawerNavigation"
+                initialRouteName="SignInWelcomeScreen"
                 screenOptions={{ headerShown: false }}
             >
                 <AuthStack.Screen name="SignInWelcomeScreen">
@@ -52,6 +53,7 @@ const AuthNavigators = () => {
                     component={DrawerNavigation}
                 />
                 <AuthStack.Screen name="PostDetails" component={PostDetails} />
+                <AuthStack.Screen name="PostScreen" component={PostScreen} />
             </AuthStack.Navigator>
         </Screen>
     )

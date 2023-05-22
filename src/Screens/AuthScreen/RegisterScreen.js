@@ -12,6 +12,9 @@ import Input from '../../Components/Input'
 import PasswordTextInput from '../../Components/PasswordTextInput'
 import SignInAlternative from '../../Components/SignInAlternative'
 
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { FIREBASE_AUTH } from '../../../firebaseConfig'
+
 const RegisterScreen = ({ navigation }) => {
     const confirmRef = useRef(null)
 
@@ -21,7 +24,24 @@ const RegisterScreen = ({ navigation }) => {
 
     const [confirmPassword, setConfirmPassword] = useState('')
     const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
 
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+            .then((userCredential) => {
+                // Signed up successfully
+                const user = userCredential.user
+                console.log('User signed up:', user)
+                navigation.navigate('SignInScreen')
+            })
+            .catch((error) => {
+                const errorCode = error.code
+                const errorMessage = error.message
+                alert([errorMessage], errorMessage)
+
+                // Handle the error here
+            })
+    }
     return (
         <View style={{ ...styles.container }}>
             <Header
@@ -36,14 +56,11 @@ const RegisterScreen = ({ navigation }) => {
                 <Text style={title}>Sign Up</Text>
             </View>
             <View>
-                <View style={{ width: 320, flexDirection: 'row' }}>
-                    <Input
-                        placeholder={'Full Name'}
-                        // width={'48%'}
-                    />
-                </View>
-
-                <Input placeholder={'Email'} />
+                <Input
+                    placeholder={'Email'}
+                    value={email}
+                    onChangeText={setEmail}
+                />
                 <PasswordTextInput
                     placeholder={'Password'}
                     value={password}
@@ -69,7 +86,7 @@ const RegisterScreen = ({ navigation }) => {
                         activeOpacity={0.7}
                         onPress={() => {
                             if (password === confirmPassword) {
-                                navigation.navigate('SignInScreen')
+                                handleSignUp()
                             } else {
                                 alert('Passwords do not match.')
                                 confirmRef.current.clear() // clear the confirm password input
@@ -117,7 +134,27 @@ const RegisterScreen = ({ navigation }) => {
                 <Text style={{ ...styles.or }}>Or</Text>
                 <View style={{ ...styles.rightline }}></View>
             </View>
-
+            {Platform.OS === 'android' ? (
+                <View
+                    style={{
+                        width: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <SignInAlternative
+                        name={'facebook'}
+                        title={'Sign In with Facebook'}
+                        bg={(backgroundColor = colors.fbBlue)}
+                        //onPress={navigation.navigate('BottomNavigator')}
+                    />
+                    <SignInAlternative
+                        name={'google'}
+                        title={'Sign In with Google'}
+                        bg={(backgroundColor = colors.google)}
+                    />
+                </View>
+            ) : null}
             <View
                 style={{
                     // flexDirection:'row',

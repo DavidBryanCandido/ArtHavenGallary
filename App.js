@@ -1,8 +1,8 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { colors } from "./src/Global/styles";
-import RootNavigation from "./src/Navigation/RootNavigation";
-import Screen from "./src/Components/Screen";
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, Text, View } from 'react-native'
+import { colors } from './src/Global/styles'
+import RootNavigation from './src/Navigation/RootNavigation'
+import Screen from './src/Components/Screen'
 
 export default function App() {
     return (
@@ -13,7 +13,7 @@ export default function App() {
             />
             <RootNavigation />
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.bgLight,
     },
-});
+})

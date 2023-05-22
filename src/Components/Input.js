@@ -4,8 +4,6 @@ import { colors } from '../Global/styles'
 import { Ionicons } from '@expo/vector-icons'
 
 const Input = ({ placeholder, value, onChangeText, width = 320 }) => {
-    const [name, setName] = useState('')
-
     return (
         <View style={{ ...styles.inputContainer, width: width }}>
             <TextInput
@@ -13,7 +11,6 @@ const Input = ({ placeholder, value, onChangeText, width = 320 }) => {
                 value={value}
                 onChangeText={onChangeText}
                 placeholderTextColor={colors.text2}
-                autoFocus
                 style={{ ...styles.input }}
             />
         </View>

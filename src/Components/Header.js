@@ -1,64 +1,60 @@
-import { StyleSheet, Text, View, Image,  } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import { colors, parameters } from '../Global/styles'
-import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 
 const Header = ({
     title,
     menuOrBack,
-    logo,      
+    logo,
     post,
+    size = 35,
     navigation,
     onMenuPress,
     onPostPress,
     fontSize = 18,
-}) => 
-
-{
+}) => {
     return (
-        <View style={{ ...styles.container, }}>
-            <LinearGradient 
-                style={styles.header} 
+        <View style={{ ...styles.container }}>
+            <LinearGradient
+                style={styles.header}
                 colors={['rgba(13, 44, 81, 9)', 'rgba(9, 31, 61, 1)']}
             >
-                    <Text style = {{ ...styles.headerText, fontSize: fontSize, fontWeight: 'bold',}} > {title} </Text>
-                <View style={{ ...styles.innerHeader,}}>
-                    <MaterialCommunityIcons 
+                <Text
+                    style={{
+                        ...styles.headerText,
+                        fontSize: fontSize,
+                        fontWeight: 'bold',
+                    }}
+                >
+                    {' '}
+                    {title}{' '}
+                </Text>
+                <View style={{ ...styles.innerHeader }}>
+                    <MaterialCommunityIcons
                         name={menuOrBack}
                         size={40}
                         color={colors.buttons}
                         style={{
-                            left:16,
+                            left: 16,
                         }}
                         onPress={onMenuPress}
                     />
-                    <View 
-                        style={{ 
-                            height: '100%', 
-                            //alignItems:'center', 
-                            justifyContent:'center',
-                            backgroundColor:'red', 
-                            position:'absolute',
-                           
-                        }}>
-                   
-                    </View>
-                            <Image 
-                                source={logo} 
-                                style={{ 
-                                    height: 35,
-                                    width:110,
-                                    alignSelf:'center',
-                                }}
-                            /> 
-                    <MaterialCommunityIcons 
+                    <Image
+                        source={logo}
+                        style={{
+                            height: 35,
+                            width: 110,
+                            alignSelf: 'center',
+                        }}
+                    />
+                    <MaterialCommunityIcons
                         name={post}
-                        size={35}
+                        size={size}
                         color={colors.buttons}
                         style={{
-                            right:16,
-                            
+                            right: 16,
                         }}
                         onPress={onPostPress}
                     />
@@ -71,34 +67,34 @@ const Header = ({
 export default Header
 
 const styles = StyleSheet.create({
-    container:{
-        flexDirection:'row',
+    container: {
+        flexDirection: 'row',
         backgroundColor: colors.ipBG,
         height: parameters.headerHeight + 1,
-        width:'100%',
-        borderColor:colors.buttons2,
-        borderBottomWidth:3,
+        width: '100%',
+        borderColor: colors.buttons2,
+        borderBottomWidth: 3,
     },
-    header:{
-        flexDirection:'row',
+    header: {
+        flexDirection: 'row',
         height: parameters.headerHeight,
-        width:'100%',
-        alignItems:'center',
-        justifyContent:'space-between',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    innerHeader:{
-        flexDirection:'row',
-        width: '100%', 
-        height:'100%',
-        alignItems:'center',
-        justifyContent:'space-between',
+    innerHeader: {
+        flexDirection: 'row',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    headerText:{
+    headerText: {
         color: colors.text1,
         //backgroundColor:'red',
-        textAlign:'center',
-        marginLeft:'23%',
-        width:150,
-        position:'absolute',
-      },
+        textAlign: 'center',
+        marginLeft: '23%',
+        width: 150,
+        position: 'absolute',
+    },
 })

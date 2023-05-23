@@ -12,7 +12,19 @@ import Header from '../Components/Header'
 import { PostedCardData } from '../Global/Data'
 import PostedCard from '../Components/PostedCard'
 import { useNavigation } from '@react-navigation/native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    getDocs,
+    updateDoc,
+    setDoc,
+    doc,
+} from 'firebase/firestore'
+
+import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
 
 const { width: screenWidth } = Dimensions.get('window')
 
@@ -24,7 +36,6 @@ const HomeScreen = ({ navigation }) => {
         navigation.navigate('PostScreen')
     }
     const navigation2 = useNavigation() // Hook for accessing the navigation object
-
     const handlePreview = (postId) => {
         console.log('Preview clicked for postId: ', postId)
         const selectedItem = PostedCardData.find(
@@ -32,7 +43,40 @@ const HomeScreen = ({ navigation }) => {
         )
         navigation2.navigate('PostDetails', { selectedItem })
     }
+    const [userProfiles, setUserProfiles] = useState([])
+    const [artData, setArtData] = useState([])
+    const fetchData = async () => {
+        try {
+            const firestore = getFirestore(FIREBASE_APP)
 
+            // Fetch art data
+            const artCollection = collection(firestore, 'art')
+            const artQuery = query(artCollection)
+
+            const artSnapshot = await getDocs(artQuery)
+            const artItems = artSnapshot.docs.map((doc) => {
+                const data = doc.data()
+                const image = data.image // Retrieve the image URL
+                return { ...data, image } // Include the image URL in the
+            })
+            console.log(artItems)
+            setArtData(artItems)
+
+            // Fetch user data
+            const usersCollection = collection(firestore, 'users')
+            const userQuery = query(usersCollection)
+
+            const userSnapshot = await getDocs(userQuery)
+            const users = userSnapshot.docs.map((doc) => doc.data())
+            setUserProfiles(users)
+        } catch (error) {
+            console.error('Error retrieving data:', error)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
     return (
         <View style={styles.container}>
             <Header
@@ -53,26 +97,32 @@ const HomeScreen = ({ navigation }) => {
                 <FlatList
                     horizontal={false}
                     style={{ width: '100%', height: '100%' }}
-                    data={PostedCardData}
+                    data={artData}
                     keyExtractor={(item) => item.postId.toString()}
-                    renderItem={({ item }) => (
-                        <View>
+                    renderItem={({ item }) => {
+                        const userProfile = userProfiles.find(
+                            (profile) => profile.userId === item.userId
+                        )
+
+                        return (
                             <PostedCard
                                 borderRadius={0}
                                 screenWidth={screenWidth}
-                                PostedImage={item.PostedImage}
-                                ArtistPf={item.ArtistPf}
-                                ArtName={item.ArtName}
-                                ArtistName={item.ArtistName}
-                                ArtistHandle={item.ArtistHandle}
-                                Price={item.Price}
-                                Likes={item.Likes}
-                                Comments={item.Comments}
+                                PostedImage={item.image}
+                                ArtName={item.artName}
+                                ArtistName={
+                                    userProfile ? userProfile.username : ''
+                                }
+                                userHandle={
+                                    userProfile ? userProfile.userHandle : ''
+                                }
+                                avatar={userProfile ? userProfile.avatar : ''}
+                                Price={item.price}
                                 postId={item.postId}
                                 onPress={() => handlePreview(item.postId)}
                             />
-                        </View>
-                    )}
+                        )
+                    }}
                 />
             </SafeAreaView>
         </View>

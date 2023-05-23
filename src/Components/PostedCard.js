@@ -17,10 +17,10 @@ const { width: screenWidth } = Dimensions.get('window') // Get the width of the 
 
 const PostedCard = ({
     PostedImage,
-    ArtistPf,
+    avatar,
     ArtName,
     ArtistName,
-    ArtistHandle,
+    userHandle,
     Price = 0,
     Likes = 0,
     Comments = 0,
@@ -58,11 +58,18 @@ const PostedCard = ({
             activeOpacity={0.9}
             onPress={onPress}
         >
-            <AutoHeightImage
-                source={PostedImage}
+            <Image
+                source={{ uri: PostedImage }} // Use PostedImage prop as the URI
+                style={{ width: 360, minHeight: 400 }}
+                resizeMode="contain"
+            />
+            {/*
+                       <AutoHeightImage
+                source={{ uri: PostedImage }}
                 width={screenWidth}
                 onHeightChange={handleImageLoad}
             />
+            */}
             <LinearGradient
                 style={{
                     position: 'absolute',
@@ -105,7 +112,7 @@ const PostedCard = ({
                             }}
                         >
                             <Image
-                                source={ArtistPf}
+                                source={{ uri: avatar }}
                                 style={{
                                     height: '100%',
                                     width: '100%',
@@ -163,7 +170,7 @@ const PostedCard = ({
                                         }}
                                         numberOfLines={numberOfLines}
                                     >
-                                        {ArtistHandle}
+                                        {userHandle}
                                     </Text>
                                 </View>
                             </View>

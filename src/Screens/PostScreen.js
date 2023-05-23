@@ -10,18 +10,30 @@ import React, { useState, useRef } from 'react'
 import { colors } from '../Global/styles'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
+// import { format } from 'date-fns' // Import the format function
 
-import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
-import { getAuth } from 'firebase/auth'
-import { collection, addDoc } from 'firebase/firestore'
+import {
+    FIRESTORE_DB,
+    FIREBASE_APP,
+    FIREBASE_AUTH,
+    FIREBASE_STORAGE,
+} from '../../firebaseConfig'
 import Input from '../Components/Input'
+import { encode, decode } from 'base-64'
+import { getAuth } from 'firebase/auth'
+import { getStorage, ref, uploadString } from 'firebase/storage'
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore'
 
 const PostScreen = ({ navigation, PostedImage }) => {
     const [selectedImage, setSelectedImage] = useState(null)
     const [selectedButton, setSelectedButton] = useState(null)
+    const [price, setPrice] = useState('')
+    const [artName, setArtName] = useState('')
+    const [postId, setPostId] = useState(1)
 
     const handleImageSelection = async () => {
         try {
+            // Request permission to access media library
             const { status } =
                 await ImagePicker.requestMediaLibraryPermissionsAsync()
 
@@ -30,16 +42,63 @@ const PostScreen = ({ navigation, PostedImage }) => {
                 return
             }
 
+            // Launch image picker
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
             })
 
             if (!result.canceled) {
+                // Create a reference to the Firebase Storage bucket
+                const storageRef = ref(
+                    getStorage(FIREBASE_APP),
+                    `images/${result.assets[0].uri.split('/').pop()}`
+                )
+
+                // Get the image URI and convert it to a data URL format
+                const dataUrl = `data:${result.assets[0].type};base64,${result.assets[0].base64}`
+                if (!global.btoa) {
+                    global.btoa = encode
+                }
+
+                if (!global.atob) {
+                    global.atob = decode
+                }
+
+                // Upload the image to Firebase Storage
+                await uploadString(storageRef, dataUrl, 'data_url')
+
                 setSelectedImage(result.assets[0].uri)
             }
         } catch (error) {
             console.log('Error while accessing media library:', error)
+        }
+    }
+
+    const handleUploadImage = async () => {
+        try {
+            const collectionRef = collection(FIRESTORE_DB, 'art')
+            const fileName = selectedImage.substring(
+                selectedImage.lastIndexOf('/') + 1
+            )
+
+            const docRef = await addDoc(collectionRef, {
+                postId: postId, // Include postId in document data
+                image: fileName,
+                button: selectedButton,
+                price: selectedButton === 'premium' ? price : null,
+                artName: artName,
+                userId: getAuth(FIREBASE_APP).currentUser.uid,
+            })
+
+            setPostId((prevPostId) => prevPostId + 1) // Increment the postId
+
+            setSelectedImage(null)
+            setSelectedButton(null)
+            setPrice('')
+            setArtName('')
+        } catch (error) {
+            console.log('Error while uploading art:', error)
         }
     }
 
@@ -179,13 +238,24 @@ const PostScreen = ({ navigation, PostedImage }) => {
                     </TouchableOpacity>
                 </View>
                 {selectedButton === 'premium' && (
-                    <Input placeholder={'Price'} />
+                    <Input
+                        placeholder={'Price'}
+                        value={price}
+                        onChangeText={setPrice}
+                    />
                 )}
-                <Input placeholder={'Art Name'} />
+                <Input
+                    placeholder={'Art Name'}
+                    value={artName}
+                    onChangeText={setArtName}
+                />
             </View>
 
             <View style={{ width: '100%', alignItems: 'center' }}>
-                <TouchableOpacity style={{ ...styles.btn, width: 320 }}>
+                <TouchableOpacity
+                    style={{ ...styles.btn, width: 320 }}
+                    onPress={handleUploadImage}
+                >
                     <Text style={styles.btnText}>Post Art</Text>
                 </TouchableOpacity>
             </View>

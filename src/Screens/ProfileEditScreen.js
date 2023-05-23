@@ -3,11 +3,7 @@ import React from 'react'
 import { colors } from '../Global/styles'
 
 const ProfileEditScreen = () => {
-    return (
-        <View style={{ ...styles.container }}>
-            <Text>ProfileEditScreen</Text>
-        </View>
-    )
+    return <View style={{ ...styles.container }}></View>
 }
 
 export default ProfileEditScreen

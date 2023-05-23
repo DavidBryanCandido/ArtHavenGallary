@@ -28,7 +28,11 @@ const ProfileNavigator = ({ navigation }) => {
         <View style={{ flex: 1, backgroundColor: colors.bgLight }}>
             <ScrollView style={styles.container} onScroll={handleScroll}>
                 <View style={styles.header}>
-                    <ProfileScreen />
+                    <ProfileScreen
+                        onPress={() => {
+                            navigation.navigate('ProfileEditScreen')
+                        }}
+                    />
                 </View>
 
                 <View style={styles.content}>

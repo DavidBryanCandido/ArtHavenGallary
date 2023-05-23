@@ -74,6 +74,7 @@ const NotificationScreen = ({ navigation }) => {
                 onMenuPress={onMenuPress}
                 navigation={navigation}
             />
+            {/*
             <View style={styles.form}>
                 <TextInput
                     placeholder="add new todo"
@@ -92,6 +93,7 @@ const NotificationScreen = ({ navigation }) => {
                     />
                 </View>
             )}
+            */}
         </View>
     )
 }

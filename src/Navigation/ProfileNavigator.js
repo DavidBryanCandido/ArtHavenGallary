@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import { StyleSheet, ScrollView, SafeAreaView, View, Text } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { StyleSheet, View, Animated, FlatList } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { colors } from '../Global/styles'
 import ProfileScreen from '../Screens/ProfileScreen'
 import ProfileAllPostScreen from '../Screens/ProfileAllPostScreen'
 import ProfileLikesScreen from '../Screens/ProfileLikesScreen'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-import { color } from 'react-native-reanimated'
-import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
 import { getAuth } from 'firebase/auth'
+import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
 
 const ProfileTab = createMaterialTopTabNavigator()
 
@@ -17,6 +16,7 @@ const ProfileNavigator = ({ navigation }) => {
     const loggedInUserId = auth.currentUser.uid
 
     const [showView, setShowView] = useState(false)
+    const scrollY = useRef(new Animated.Value(0)).current
 
     const handleScroll = (event) => {
         const scrollPosition = event.nativeEvent.contentOffset.y
@@ -24,60 +24,68 @@ const ProfileNavigator = ({ navigation }) => {
         const threshold = 230
         setShowView(scrollPosition > threshold)
     }
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.bgLight }}>
-            <ScrollView style={styles.container} onScroll={handleScroll}>
-                <View style={styles.header}>
-                    <ProfileScreen
-                        onPress={() => {
-                            navigation.navigate('ProfileEditScreen')
+            <View style={styles.header}></View>
+
+            <View style={[styles.content]}>
+                <ProfileTab.Navigator
+                    initialRouteName="ProfileAllPostScreen"
+                    screenOptions={{
+                        tabBarLabelStyle: {
+                            fontSize: 16,
+                            marginTop: -5,
+                            fontWeight: 'bold',
+                            textTransform: 'capitalize',
+                            flex: 1,
+                        },
+                        tabBarStyle: {
+                            backgroundColor: colors.hBG,
+                            height: 35,
+                        },
+                        tabBarActiveTintColor: colors.buttons2,
+                        tabBarInactiveTintColor: colors.buttons,
+                        tabBarIndicatorStyle: {
+                            backgroundColor: colors.buttons2,
+                        },
+                        tabBarIndicatorContainerStyle: {
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        },
+                    }}
+                >
+                    <ProfileTab.Screen
+                        name="ProfileScreen"
+                        options={{ title: 'Profile' }}
+                    >
+                        {({ navigation }) => (
+                            <ProfileScreen
+                                onPress={() => {
+                                    navigation.navigate('ProfileEditScreen')
+                                }}
+                            />
+                        )}
+                    </ProfileTab.Screen>
+                    <ProfileTab.Screen
+                        name="ProfileAllPostScreen"
+                        component={ProfileAllPostScreen}
+                        options={{
+                            title: 'Posts',
                         }}
                     />
-                </View>
-
-                <View style={styles.content}>
-                    <ProfileTab.Navigator
-                        initialRouteName="ProfileAllPostScreen"
-                        screenOptions={{
-                            tabBarLabelStyle: {
-                                fontSize: 16,
-                                marginTop: -5,
-                                fontWeight: 'bold',
-                                textTransform: 'capitalize',
-                                flex: 1,
-                            },
-                            tabBarStyle: {
-                                backgroundColor: colors.hBG,
-                                height: 35,
-                            },
-                            tabBarActiveTintColor: colors.buttons2,
-                            tabBarInactiveTintColor: colors.buttons,
-                            tabBarIndicatorStyle: {
-                                backgroundColor: colors.buttons2,
-                            },
-                            tabBarIndicatorContainerStyle: {
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            },
+                    {/*
+                    <ProfileTab.Screen
+                        name="ProfileLikesScreen"
+                        component={ProfileLikesScreen}
+                        options={{
+                            title: 'Favorite',
                         }}
-                    >
-                        <ProfileTab.Screen
-                            name="ProfileAllPostScreen"
-                            component={ProfileAllPostScreen}
-                            options={{
-                                title: 'Posts',
-                            }}
-                        />
-                        <ProfileTab.Screen
-                            name="ProfileLikesScreen"
-                            component={ProfileLikesScreen}
-                            options={{
-                                title: 'Favorite',
-                            }}
-                        />
-                    </ProfileTab.Navigator>
-                </View>
-            </ScrollView>
+                    />
+                    */}
+                </ProfileTab.Navigator>
+            </View>
+
             <View style={styles.showView}>
                 <Ionicons
                     name="chevron-back-outline"
@@ -110,17 +118,13 @@ const ProfileNavigator = ({ navigation }) => {
 export default ProfileNavigator
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     header: {
         backgroundColor: colors.bgLight,
-        height: 300,
-        marginTop: 50,
+        height: 50,
     },
     content: {
-        // flex: 1,
-        height: 615,
+        flex: 1,
+        // height: 615,
     },
     showView: {
         position: 'absolute',

@@ -211,27 +211,6 @@ const RegisterScreen = ({ navigation }) => {
                 <Text style={{ ...styles.or }}>Or</Text>
                 <View style={{ ...styles.rightline }}></View>
             </View>
-            {Platform.OS === 'android' ? (
-                <View
-                    style={{
-                        width: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <SignInAlternative
-                        name={'facebook'}
-                        title={'Sign In with Facebook'}
-                        bg={(backgroundColor = colors.fbBlue)}
-                        //onPress={navigation.navigate('BottomNavigator')}
-                    />
-                    <SignInAlternative
-                        name={'google'}
-                        title={'Sign In with Google'}
-                        bg={(backgroundColor = colors.google)}
-                    />
-                </View>
-            ) : null}
             <View
                 style={{
                     // flexDirection:'row',

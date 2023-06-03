@@ -51,6 +51,7 @@ const ProfileScreen = ({
     const [editedBanner, setEditedBanner] = useState(banner)
     const [selectedAvatarUri, setSelectedAvatarUri] = useState(avatar)
     const [selectedBannerUri, setSelectedBannerUri] = useState(banner)
+    const [postCount, setPostCount] = useState(0) // New state variable
 
     const selectAvatar = async () => {
         try {
@@ -121,6 +122,22 @@ const ProfileScreen = ({
         const firestore = getFirestore(FIREBASE_APP)
         const usersCollection = collection(firestore, 'users')
         const userQuery = query(usersCollection, where('userId', '==', userId))
+        // Retrieve post count from Firestore
+        const postsCollection = collection(firestore, 'art')
+        const userPostsQuery = query(
+            postsCollection,
+            where('userId', '==', loggedInUserId)
+        )
+
+        getDocs(userPostsQuery)
+            .then((querySnapshot) => {
+                const count = querySnapshot.size // Get the number of documents in the query snapshot
+                setPostCount(count) // Update the postCount state variable
+            })
+            .catch((error) => {
+                console.error('Error retrieving user posts:', error)
+            })
+
         getDocs(userQuery)
             .then((querySnapshot) => {
                 if (!querySnapshot.empty) {
@@ -515,7 +532,7 @@ const ProfileScreen = ({
                             fontSize: 16,
                         }}
                     >
-                        {shortenNumber(Post)}
+                        {shortenNumber(postCount)}
                     </Text>
                     <Text style={{ color: colors.text2, fontSize: 16 }}>
                         Post
@@ -530,9 +547,9 @@ export default ProfileScreen
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
+        flex: 1,
         // height: 300,
-        height: 300,
+        // height: 300,
         backgroundColor: colors.bgLight,
     },
     topCon: {

@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 const { width: screenWidth } = Dimensions.get('window') // Get the width of the screen
 
-const PostDetails = ({
+const Postdetails2 = ({
     route,
     navigation,
     numberOfLines = 1,
@@ -31,7 +31,7 @@ const PostDetails = ({
     }
     const onMenuPress = () => {
         navigation.goBack()
-        toggleModal()
+        onPress = { toggleModal }
     }
     function shortenNumber(num) {
         if (num >= 1000000000000) {
@@ -49,7 +49,7 @@ const PostDetails = ({
     const [showAllTags, setShowAllTags] = useState(false)
     const maxTagsToShow = 5
 
-    const { selectedItem, username, userHandle, avatar } = route.params
+    const { selectedItem } = route.params
     // Use the selectedItem data to render the preview screen
     return (
         <ScrollView contentContainerStyle={{ ...styles.container }}>
@@ -63,7 +63,7 @@ const PostDetails = ({
                 onPress={toggleModal}
             >
                 <Image
-                    source={{ uri: selectedItem.image }}
+                    source={selectedItem.PostedImage}
                     width={screenWidth * 0.99}
                     style={{ height: 500 }}
                 />
@@ -102,7 +102,7 @@ const PostDetails = ({
                             style={{ marginHorizontal: 10 }}
                         />
                         <Text style={{ color: colors.text1, fontSize: 20 }}>
-                            {shortenNumber((selectedItem.Likes = 0))}
+                            {shortenNumber(selectedItem.Likes)}
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -120,7 +120,7 @@ const PostDetails = ({
                             style={{ marginHorizontal: 10 }}
                         />
                         <Text style={{ color: colors.text1, fontSize: 20 }}>
-                            {shortenNumber((selectedItem.Comments = 0))}
+                            {shortenNumber(selectedItem.Comments)}
                         </Text>
                     </TouchableOpacity>
                     {selectedItem.Price <= 0 ? (
@@ -170,7 +170,7 @@ const PostDetails = ({
                     }}
                 >
                     <Image
-                        source={{ uri: avatar }}
+                        source={selectedItem.ArtistPf}
                         style={{
                             height: '100%',
                             width: '100%',
@@ -186,7 +186,7 @@ const PostDetails = ({
                         }}
                         numberOfLines={numberOfLines}
                     >
-                        {selectedItem.artName}
+                        {selectedItem.ArtName}
                     </Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Text
@@ -197,7 +197,7 @@ const PostDetails = ({
                             }}
                             numberOfLines={numberOfLines}
                         >
-                            By: {username}
+                            By: {selectedItem.ArtistName}
                         </Text>
                     </View>
                 </View>
@@ -244,20 +244,18 @@ const PostDetails = ({
                         marginHorizontal: 16,
                     }}
                 >
-                    {selectedItem.tags && Array.isArray(selectedItem.tags)
-                        ? selectedItem.tags
-                              .slice(
-                                  0,
-                                  showAllTags
-                                      ? selectedItem.tags.length
-                                      : maxTagsToShow
-                              )
-                              .map((tag, index) => (
-                                  <Text key={index} style={{ ...styles.tags }}>
-                                      {tag}
-                                  </Text>
-                              ))
-                        : null}
+                    {selectedItem.tags
+                        .slice(
+                            0,
+                            showAllTags
+                                ? selectedItem.tags.length
+                                : maxTagsToShow
+                        )
+                        .map((tag, index) => (
+                            <Text key={index} style={{ ...styles.tags }}>
+                                {tag}
+                            </Text>
+                        ))}
                     {showAllTags ? (
                         <TouchableOpacity
                             onPress={() => setShowAllTags(false)}
@@ -268,7 +266,6 @@ const PostDetails = ({
                             </Text>
                         </TouchableOpacity>
                     ) : (
-                        selectedItem.tags &&
                         selectedItem.tags.length > maxTagsToShow && (
                             <TouchableOpacity
                                 onPress={() => setShowAllTags(true)}
@@ -284,6 +281,7 @@ const PostDetails = ({
                     )}
                 </View>
             </View>
+
             <Modal visible={modalVisible} animationType="slide">
                 <ScrollView
                     contentContainerStyle={{
@@ -297,9 +295,10 @@ const PostDetails = ({
                     />
                     <View style={{ ...styles.imgCon2 }}>
                         <Image
-                            source={{ uri: selectedItem.image }}
+                            source={selectedItem.PostedImage}
                             width={screenWidth * 0.99}
-                            style={{ height: 500 }}
+                            style={{ height: '90%' }}
+                            resizeMode='contain'
                         />
                         <Ionicons
                             name="close"
@@ -325,7 +324,7 @@ const PostDetails = ({
     )
 }
 
-export default PostDetails
+export default Postdetails2
 
 const styles = StyleSheet.create({
     container: {

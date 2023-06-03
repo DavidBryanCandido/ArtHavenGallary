@@ -6,25 +6,17 @@ import {
     SafeAreaView,
     Dimensions,
     FlatList,
+    RefreshControl,
 } from 'react-native'
 import { colors } from '../Global/styles'
 import Header from '../Components/Header'
-import { PostedCardData } from '../Global/Data'
 import PostedCard from '../Components/PostedCard'
 import { useNavigation } from '@react-navigation/native'
 import { useState, useEffect } from 'react'
-import {
-    getFirestore,
-    collection,
-    query,
-    where,
-    getDocs,
-    updateDoc,
-    setDoc,
-    doc,
-} from 'firebase/firestore'
+import { getFirestore, collection, query, getDocs } from 'firebase/firestore'
 
 import { FIRESTORE_DB, FIREBASE_APP, FIREBASE_AUTH } from '../../firebaseConfig'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const { width: screenWidth } = Dimensions.get('window')
 
@@ -36,15 +28,39 @@ const HomeScreen = ({ navigation }) => {
         navigation.navigate('PostScreen')
     }
     const navigation2 = useNavigation() // Hook for accessing the navigation object
+
+    // const handlePreview = (postId) => {
+    //     const selectedItem = artData.find((item) => item.postId === postId)
+    //     console.log(selectedItem)
+    //     if (selectedItem) {
+    //         navigation2.navigate('PostDetails', { selectedItem })
+    //     }
+    // }
     const handlePreview = (postId) => {
-        console.log('Preview clicked for postId: ', postId)
-        const selectedItem = PostedCardData.find(
-            (item) => item.postId === postId
-        )
-        navigation2.navigate('PostDetails', { selectedItem })
+        const selectedItem = artData.find((item) => item.postId === postId)
+        if (selectedItem) {
+            console.log(selectedItem)
+            console.log(userProfiles)
+            const userProfile = userProfiles.find(
+                (profile) => profile.userId === selectedItem.userId
+            )
+            console.log(userProfile)
+            if (userProfile) {
+                navigation2.navigate('PostDetails', {
+                    selectedItem,
+                    username: userProfile.username,
+                    userHandle: userProfile.userHandle,
+                    avatar: userProfile.avatar,
+                })
+            } else {
+                navigation2.navigate('PostDetails', { selectedItem })
+            }
+        }
     }
-    const [userProfiles, setUserProfiles] = useState([])
+
     const [artData, setArtData] = useState([])
+    const [userProfiles, setUserProfiles] = useState([])
+
     const fetchData = async () => {
         try {
             const firestore = getFirestore(FIREBASE_APP)
@@ -57,9 +73,8 @@ const HomeScreen = ({ navigation }) => {
             const artItems = artSnapshot.docs.map((doc) => {
                 const data = doc.data()
                 const image = data.image // Retrieve the image URL
-                return { ...data, image } // Include the image URL in the
+                return { ...data, image } // Include the image URL in the item object
             })
-            console.log(artItems)
             setArtData(artItems)
 
             // Fetch user data
@@ -77,13 +92,28 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    const keyExtractor = (item) => {
+        if (item && item.postId) {
+            return item.postId
+        }
+        return ''
+    }
+
+    const [refreshing, setRefreshing] = useState(false)
+
+    const handleRefresh = async () => {
+        setRefreshing(true)
+        await fetchData()
+        setRefreshing(false)
+    }
+
     return (
         <View style={styles.container}>
             <Header
                 menuOrBack={'forwardburger'}
-                //menuOrBack={'grid-outline'}
-                //title={'MY ACCOUNT'}
                 post={'plus-box-outline'}
+                refresh={'refresh'} // Add the refresh button
                 logo={require('../../assets/ArtHaven_logo.png')}
                 onPostPress={onPostPress}
                 onMenuPress={onMenuPress}
@@ -98,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
                     horizontal={false}
                     style={{ width: '100%', height: '100%' }}
                     data={artData}
-                    keyExtractor={(item) => item.postId.toString()}
+                    keyExtractor={keyExtractor}
                     renderItem={({ item }) => {
                         const userProfile = userProfiles.find(
                             (profile) => profile.userId === item.userId
@@ -116,13 +146,19 @@ const HomeScreen = ({ navigation }) => {
                                 userHandle={
                                     userProfile ? userProfile.userHandle : ''
                                 }
-                                avatar={userProfile ? userProfile.avatar : ''}
+                                avatar={userProfile ? userProfile.avatar : null}
                                 Price={item.price}
                                 postId={item.postId}
                                 onPress={() => handlePreview(item.postId)}
                             />
                         )
                     }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={handleRefresh}
+                        />
+                    }
                 />
             </SafeAreaView>
         </View>
@@ -138,10 +174,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
-
-    linearGradient: {
-        width: '100%',
-        height: '50%',
-        overflow: 'hidden',
+    refreshButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        marginBottom: 10,
     },
 })

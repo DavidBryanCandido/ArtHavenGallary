@@ -12,6 +12,7 @@ import PostDetails from '../Screens/PostDetails'
 import PostScreen from '../Screens/PostScreen'
 import ProfileEditScreen from '../Screens/ProfileEditScreen'
 import ProfileScreen from '../Screens/ProfileScreen'
+import Postdetails2 from '../Screens/postdetails2'
 
 const AuthStack = createStackNavigator()
 
@@ -55,6 +56,10 @@ const AuthNavigators = () => {
                     component={DrawerNavigation}
                 />
                 <AuthStack.Screen name="PostDetails" component={PostDetails} />
+                <AuthStack.Screen
+                    name="Postdetails2"
+                    component={Postdetails2}
+                />
                 <AuthStack.Screen name="PostScreen" component={PostScreen} />
                 <AuthStack.Screen
                     name="ProfileScreen"

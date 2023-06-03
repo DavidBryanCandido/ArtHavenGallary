@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 const { width: screenWidth } = Dimensions.get('window') // Get the width of the screen
 
-const PostedCard = ({
+const Card = ({
     PostedImage,
     avatar,
     ArtName,
@@ -61,10 +61,10 @@ const PostedCard = ({
         >
             {PostedImage ? (
                 <Image
-                    source={{ uri: PostedImage }}
+                    source={PostedImage}
                     width={screenWidth}
                     onHeightChange={handleImageLoad}
-                    style={{ height:500}}
+                    style={{ height: 500 }}
                 />
             ) : null}
             {/*
@@ -116,7 +116,7 @@ const PostedCard = ({
                             }}
                         >
                             <Image
-                                source={{ uri: avatar }}
+                                source={avatar}
                                 style={{
                                     height: '100%',
                                     width: '100%',
@@ -290,7 +290,7 @@ const PostedCard = ({
     )
 }
 
-export default PostedCard
+export default Card
 
 const styles = StyleSheet.create({
     container: {

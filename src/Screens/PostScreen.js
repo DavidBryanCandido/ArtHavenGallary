@@ -74,24 +74,21 @@ const PostScreen = ({ navigation, PostedImage }) => {
             console.log('Error while accessing media library:', error)
         }
     }
-
     const handleUploadImage = async () => {
         try {
             const collectionRef = collection(FIRESTORE_DB, 'art')
-            const fileName = selectedImage.substring(
-                selectedImage.lastIndexOf('/') + 1
-            )
+
+            // Generate a new postId using a timestamp
+            const newPostId = Date.now().toString()
 
             const docRef = await addDoc(collectionRef, {
-                postId: postId, // Include postId in document data
-                image: fileName,
+                postId: newPostId,
+                image: selectedImage,
                 button: selectedButton,
                 price: selectedButton === 'premium' ? price : null,
                 artName: artName,
-                userId: getAuth(FIREBASE_APP).currentUser.uid,
+                userId: getAuth().currentUser.uid,
             })
-
-            setPostId((prevPostId) => prevPostId + 1) // Increment the postId
 
             setSelectedImage(null)
             setSelectedButton(null)
